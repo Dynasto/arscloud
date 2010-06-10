@@ -9,14 +9,14 @@ using Microsoft.WindowsAzure.Diagnostics;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.StorageClient;
 
-namespace ArsCloudWorker
+namespace ArsCloud.Worker
 {
 	public class WorkerRole : RoleEntryPoint
 	{
 		public override void Run()
 		{
 			// This is a sample worker implementation. Replace with your logic.
-			Trace.WriteLine("ArsCloudWorker entry point called", "Information");
+			Trace.WriteLine("ArsCloud.Worker entry point called", "Information");
 
 			while(true)
 			{
