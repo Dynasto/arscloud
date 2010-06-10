@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RoleModel name="ArsCloudWorker" version="1.0">
+  <Properties>
+    <Property name="RoleType" value="Worker" />
+    <Property name="RoleName" value="ArsCloudWorker" />
+    <Property name="ProjectName" value="ArsCloudWorker" />
+    <Property name="Configuration" value="Debug" />
+    <Property name="Platform" value="AnyCPU" />
+    <Property name="SourceDir" value="" />
+    <Property name="OutputDir" value="c:\users\drpizza\documents\visual studio 2010\Projects\ArsCloud\ArsCloud\obj\Debug\ArsCloudWorker\" />
+    <Property name="EntryPoint" value="ArsCloudWorker.dll" />
+    <Property name="RoleTargetFramework" value="v4.0" />
+    <Property name="OriginalItemSpec" value="c:\users\drpizza\documents\visual studio 2010\Projects\ArsCloud\ArsCloud\ArsCloud.ccproj" />
+    <Property name="MSBuildSourceProjectFile" value="c:\users\drpizza\documents\visual studio 2010\Projects\ArsCloud\ArsCloud\ArsCloud.ccproj" />
+    <Property name="MSBuildSourceTargetName" value="ResolveSingleWorkerRoleReference" />
+    <Property name="TargetFrameworkVersion" value="v4.0" />
+    <Property name="TargetRuntimeVersion" value="v4.0" />
+  </Properties>
+</RoleModel>
