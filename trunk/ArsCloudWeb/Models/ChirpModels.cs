@@ -13,8 +13,5 @@ namespace ArsCloudWeb.Models
 		[DataType(DataType.MultilineText)]
 		[DisplayName("What are you doing?")]
 		public string Chirp { get; set; }
-
-		[DataType(DataType.DateTime)]
-		public DateTime Timestamp { get; set; }
 	}
 }
