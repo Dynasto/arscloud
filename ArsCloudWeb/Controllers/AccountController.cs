@@ -8,6 +8,8 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using ArsCloudWeb.Models;
+using ArsCloudWeb.Data;
+using System.Web.Profile;
 
 namespace ArsCloudWeb.Controllers
 {
@@ -94,6 +96,20 @@ namespace ArsCloudWeb.Controllers
 
 				if(createStatus == MembershipCreateStatus.Success)
 				{
+					foreach(string file in Request.Files)
+					{
+						HttpPostedFileBase hpf = Request.Files[file] as HttpPostedFileBase;
+						if(hpf.ContentLength == 0)
+						{
+							continue;
+						}
+						ProfileBase pb = ProfileBase.Create(model.UserName, true);
+						Uri geller = AvatarManager.Save(model.UserName, hpf.InputStream);
+						pb["AvatarUri"] = geller.ToString();
+						ResizeRequestManager.AddResizeRequest(geller);
+						pb.Save();
+					}
+
 					FormsService.SignIn(model.UserName, false /* createPersistentCookie */);
 					return RedirectToAction("Index", "Home");
 				}

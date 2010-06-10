@@ -86,7 +86,7 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\ChirpModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Data\ChirpManager.cs" />
+    <Compile Include="Data\Azure.cs" />
     <Compile Include="Utility\Utility.cs" />
     <Compile Include="WebRole.cs" />
   </ItemGroup>
