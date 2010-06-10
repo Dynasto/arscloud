@@ -216,6 +216,14 @@ namespace ArsCloud.Azure
 			return cloudBlobContainer.GetBlobReference(GetBlobName(username)).Uri;
 		}
 
+		public static Uri GetUri(string username, int size)
+		{
+			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
+			CloudBlobClient cloudBlobClient = account.CreateCloudBlobClient();
+			CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(CONTAINER_NAME);
+			return cloudBlobContainer.GetBlobReference(GetBlobName(username) + "/" + size.ToString()).Uri;
+		}
+
 		public static Stream GetReadStream(Uri geller)
 		{
 			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
@@ -231,5 +239,14 @@ namespace ArsCloud.Azure
 			CloudBlob cb = new CloudBlob(geller.ToString(), cloudBlobClient);
 			return cb.OpenWrite();
 		}
+
+		public static Stream GetWriteStream(Uri geller, int size)
+		{
+			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
+			CloudBlobClient cloudBlobClient = account.CreateCloudBlobClient();
+			CloudBlob cb = new CloudBlob(geller.ToString() + "/" + size.ToString(), cloudBlobClient);
+			return cb.OpenWrite();
+		}
+
 	}
 }
