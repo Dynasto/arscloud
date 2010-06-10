@@ -13,7 +13,7 @@
         Passwords are required to be a minimum of <%: ViewData["PasswordLength"] %> characters in length.
     </p>
 
-    <% using (Html.BeginForm()) { %>
+    <% using (Html.BeginForm("Register", "Account", FormMethod.Post, new { enctype = "multipart/form-data" })) { %>
         <%: Html.ValidationSummary(true, "Account creation was unsuccessful. Please correct the errors and try again.") %>
         <div>
             <fieldset>
@@ -49,6 +49,13 @@
                 <div class="editor-field">
                     <%: Html.PasswordFor(m => m.ConfirmPassword) %>
                     <%: Html.ValidationMessageFor(m => m.ConfirmPassword) %>
+                </div>
+
+                <div class="editor-label">
+                    Avatar
+                </div>
+                <div class="editor-field">
+                    <input type="file" name="avatar-file" />
                 </div>
                 
                 <p>

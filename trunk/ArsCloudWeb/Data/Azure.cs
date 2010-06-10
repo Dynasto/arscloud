@@ -5,6 +5,9 @@ using System.Web;
 using Microsoft.WindowsAzure.StorageClient;
 using Microsoft.WindowsAzure;
 using System.Diagnostics;
+using System.IO;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace ArsCloudWeb.Data
 {
@@ -120,5 +123,82 @@ namespace ArsCloudWeb.Data
 		//{
 		//    return (from c in Find() where c.Text.Contains(username) select c).ToList().Select((c) => new Chirp(c.Username, c.Text, c.Timestamp)).ToList();
 		//}
+	}
+
+	public class ResizeRequestManager
+	{
+		private static string QUEUE_NAME = "resizes";
+
+		public static void Initialize()
+		{
+			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
+			CloudQueueClient cloudQueueClient = account.CreateCloudQueueClient();
+			CloudQueue queue = cloudQueueClient.GetQueueReference(QUEUE_NAME);
+			queue.CreateIfNotExist();
+		}
+
+		public static void AddResizeRequest(Uri imageToResize)
+		{
+			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
+			CloudQueueClient cloudQueueClient = account.CreateCloudQueueClient();
+			CloudQueue queue = cloudQueueClient.GetQueueReference(QUEUE_NAME);
+			CloudQueueMessage message = new CloudQueueMessage(imageToResize.ToString());
+			queue.AddMessage(message);
+		}
+	}
+
+	public class AvatarManager
+	{
+		private static string CONTAINER_NAME = "avatars";
+
+		private static string GetHexBytes(byte[] bytes)
+		{
+			StringBuilder sb = new StringBuilder(bytes.Length * 2);
+			foreach(byte b in bytes)
+			{
+				sb.Append(b.ToString("X2"));
+			}
+			return sb.ToString();
+		}
+
+		private static string GetBlobName(string username)
+		{
+			return GetHexBytes(MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(username)));
+		}
+
+		public static void Initialize()
+		{
+			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
+			CloudBlobClient cloudBlobClient = account.CreateCloudBlobClient();
+			CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(CONTAINER_NAME);
+			
+			if(cloudBlobContainer.CreateIfNotExist())
+			{
+				BlobContainerPermissions bcp = new BlobContainerPermissions();
+				bcp.PublicAccess = BlobContainerPublicAccessType.Blob;
+				cloudBlobContainer.SetPermissions(bcp);
+			}
+		}
+
+		public static Uri Save(string username, Stream input)
+		{
+			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
+			CloudBlobClient cloudBlobClient = account.CreateCloudBlobClient();
+			CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(CONTAINER_NAME);
+			CloudBlob cloudBlob = cloudBlobContainer.GetBlobReference(GetBlobName(username));
+			using(BlobStream blobStream = cloudBlob.OpenWrite())
+			{
+				input.CopyTo(blobStream); // oh wow, we finally don't have to manually copy between streams.
+			}
+			return cloudBlob.Uri;
+		}
+
+		public static Uri GetUri(string username)
+		{
+			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
+			CloudBlobClient cloudBlobClient = account.CreateCloudBlobClient();
+			CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(CONTAINER_NAME);
+			return cloudBlobContainer.GetBlobReference(GetBlobName(username)).Uri;
+		}
 	}
 }

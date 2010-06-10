@@ -38,6 +38,8 @@ namespace ArsCloudWeb
 			});
 
 			ChirpManager.Initialize();
+			AvatarManager.Initialize();
+			ResizeRequestManager.Initialize();
 
 			return base.OnStart();
 		}
