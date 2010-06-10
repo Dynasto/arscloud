@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using ArsCloudWeb.Models;
-using ArsCloudWeb.Data;
+using ArsCloud.Web.Models;
+using ArsCloud.Azure;
 
-namespace ArsCloudWeb.Controllers
+namespace ArsCloud.Web.Controllers
 {
 	public class ChirpController : Controller
 	{

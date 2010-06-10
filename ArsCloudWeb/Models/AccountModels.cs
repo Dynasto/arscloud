@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 
-namespace ArsCloudWeb.Models
+namespace ArsCloud.Web.Models
 {
 
 	#region Models

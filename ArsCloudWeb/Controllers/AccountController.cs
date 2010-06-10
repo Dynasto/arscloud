@@ -7,11 +7,11 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
-using ArsCloudWeb.Models;
-using ArsCloudWeb.Data;
+using ArsCloud.Web.Models;
+using ArsCloud.Azure;
 using System.Web.Profile;
 
-namespace ArsCloudWeb.Controllers
+namespace ArsCloud.Web.Controllers
 {
 
 	[HandleError]

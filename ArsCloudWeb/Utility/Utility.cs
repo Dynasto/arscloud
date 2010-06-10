@@ -8,7 +8,7 @@ using System.Web.Routing;
 using System.Globalization;
 using System.Reflection;
 
-namespace ArsCloudWeb.Utility
+namespace ArsCloud.Web.Utility
 {
 	// from http://blogs.intesoft.net/post/2009/02/RenderSubAction-alternative-to-RenderAction-for-sub-controllers-using-asp-net-mvc.aspx
 	public static class HtmlHelperExtensions

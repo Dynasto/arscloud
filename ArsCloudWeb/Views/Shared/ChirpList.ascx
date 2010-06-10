@@ -1,5 +1,5 @@
-﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<System.Collections.Generic.IList<ArsCloudWeb.Data.Chirp>>" %>
-<%@ Import Namespace="ArsCloudWeb.Data" %>
+﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<System.Collections.Generic.IList<ArsCloud.Web.Data.Chirp>>" %>
+<%@ Import Namespace="ArsCloud.Azure" %>
 
 <div class="chirp-list">
 <ul>

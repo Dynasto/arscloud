@@ -4,9 +4,9 @@ using System.Linq;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.Diagnostics;
 using Microsoft.WindowsAzure.ServiceRuntime;
-using ArsCloudWeb.Data;
+using ArsCloud.Azure;
 
-namespace ArsCloudWeb
+namespace ArsCloud.Web
 {
 	public class WebRole : RoleEntryPoint
 	{
