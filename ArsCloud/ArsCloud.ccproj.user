@@ -9,8 +9,8 @@
     <DeploymentIncludeIntellitrace>False</DeploymentIncludeIntellitrace>
     <DeploymentStorageService>arscloudstorage</DeploymentStorageService>
     <DeploymentStorageServiceLabel>arscloudstorage</DeploymentStorageServiceLabel>
-    <DeploymentLabel>ArsCloud - 10/06/2010 03:46:39</DeploymentLabel>
+    <DeploymentLabel>ArsCloud - 10/06/2010 13:23:37</DeploymentLabel>
     <DeploymentPromptBeforeDeleting>False</DeploymentPromptBeforeDeleting>
-    <DeploymentIsExpanded>True</DeploymentIsExpanded>
+    <DeploymentIsExpanded>False</DeploymentIsExpanded>
   </PropertyGroup>
 </Project>
