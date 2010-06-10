@@ -2,17 +2,26 @@
 <%@ Import Namespace="ArsCloud.Azure" %>
 
 <div class="chirp-list">
-<ul>
+	<table>
 	<%
 		foreach(Chirp c in (IList<Chirp>)ViewData["Chirps"])
 		{
 		%>
-		<li>
-			<div class="chirp-username"><%= Html.Encode(c.Username) %></div>
-			<div class="chirp-text"><%= Html.Encode(c.Text) %></div>
-			<div class="chirp-timestamp"><%= Html.Encode(c.Timestamp) %></div>
-		</li>
+		<tr>
+			<td class="chirp-avatar">
+			<%
+			if(AvatarManager.HasUri(c.Username, 16))
+			{
+				%><img src="<%= AvatarManager.GetUri(c.Username, 16) %>" width="16" height="16" alt="<%= Html.Encode(c.Username) %>" /><%
+			}
+			%>
+			</td>
+			<td class="chirp-username"><%= HttpUtility.HtmlEncode(c.Username)%></td>
+			<td class="chirp-text"><%= HttpUtility.HtmlEncode(c.Text)%></td>
+			<td class="chirp-timestamp"><%= HttpUtility.HtmlEncode(c.Timestamp)%></td>
+		</tr>
 		<%
 		}
-	%></ul>
+	%>
+	</table>
 </div>
