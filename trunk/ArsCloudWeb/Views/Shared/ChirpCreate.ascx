@@ -5,16 +5,18 @@
 		using(Html.BeginForm("Create", "Chirp"))
 		{
 		%>
-		<div>
-			<fieldset>
-				<div class="editor-label">
+		<div class="chirp-form">
+			<fieldset class="chirp-fields">
+				<div class="chirp-textbox-label">
 					<%: Html.LabelFor(m => m.Chirp)%>
 				</div>
-				<div class="editor-field">
-					<%: Html.TextAreaFor(m => m.Chirp)%>
+				<div class="chirp-textbox">
+					<%: Html.TextAreaFor(m => m.Chirp, new { cols = "64", rows="4" })%>
 					<%: Html.ValidationMessageFor(m => m.Chirp)%>
 				</div>
-				<input type="submit" value="Chirp!" />
+				<div class="chirp-submit">
+					<input class="chirp-submit-button" type="submit" value="Chirp!" />
+				</div>
 			</fieldset>
 		</div>
 		<%

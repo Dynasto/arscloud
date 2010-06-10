@@ -32,7 +32,7 @@ namespace ArsCloudWeb.Data
 		{
 		}
 
-		public ChirpEntity(String username, String text) : base(username, String.Format("{0:10}", DateTime.UtcNow.Ticks))
+		public ChirpEntity(String username, String text) : base("Chirps", String.Format("{0:10}", DateTime.MaxValue.Ticks - DateTime.UtcNow.Ticks) + username)
 		{
 			Username = username;
 			Text = text;
