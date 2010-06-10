@@ -12,9 +12,14 @@ namespace ArsCloudWeb.Controllers
 	{
 		public ActionResult Index()
 		{
-			//ViewData["Message"] = "Welcome to ASP.NET MVC!";
-			ViewData["AllChirps"] = ChirpManager.FindAll();
+			ViewData["ListMode"] = "all";
 			return View();
+		}
+
+		public ActionResult IndexMine()
+		{
+			ViewData["ListMode"] = "mine";
+			return View("Index");
 		}
 
 		public ActionResult About()

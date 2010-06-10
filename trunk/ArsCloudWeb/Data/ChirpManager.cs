@@ -32,14 +32,16 @@ namespace ArsCloudWeb.Data
 		{
 		}
 
-		public ChirpEntity(String username, String text) : base("Chirps", String.Format("{0:10}", DateTime.MaxValue.Ticks - DateTime.UtcNow.Ticks) + username)
+		public ChirpEntity(String username, String text, DateTime timestamp) : base("Chirps", String.Format("{0:10}-{1}", DateTime.MaxValue.Ticks - DateTime.UtcNow.Ticks, username.GetHashCode()))
 		{
 			Username = username;
 			Text = text;
+			TimeStamp = timestamp;
 		}
 
 		public String Username { get; set; }
 		public String Text { get; set; }
+		public DateTime TimeStamp { get; set; }
 	}
 
 	public class ChirpContext : TableServiceContext
@@ -59,17 +61,17 @@ namespace ArsCloudWeb.Data
 			}
 		}
 
-		public DateTime AddChirp(string username, string text)
+		public String AddChirp(string username, string text, DateTime timestamp)
 		{
-			TableServiceEntity entity = new ChirpEntity(username, text);
+			TableServiceEntity entity = new ChirpEntity(username, text, timestamp);
 			AddObject(TABLE_NAME, entity);
 			SaveChanges();
-			return entity.Timestamp;
+			return entity.RowKey;
 		}
 
-		public void DelChirp(DateTime timestamp)
+		public void DelChirp(String rowKey)
 		{
-			ChirpEntity res = (from c in ChirpEntities where c.Timestamp == timestamp select c).First();
+			ChirpEntity res = (from c in ChirpEntities where c.RowKey == rowKey select c).First();
 			DeleteObject(res);
 			SaveChanges();
 		}
@@ -90,7 +92,9 @@ namespace ArsCloudWeb.Data
 		{
 			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
 			ChirpContext context = new ChirpContext(account.TableEndpoint.ToString(), account.Credentials);
-			return new Chirp(username, text, context.AddChirp(username, text));
+			DateTime now = DateTime.UtcNow;
+			context.AddChirp(username, text, now);
+			return new Chirp(username, text, now);
 		}
 
 		protected static IQueryable<ChirpEntity> Find()
@@ -112,9 +116,9 @@ namespace ArsCloudWeb.Data
 			return (from c in Find() where c.Username == username select c).ToList().Select((c) => new Chirp(c.Username, c.Text, c.Timestamp)).ToList();
 		}
 
-		public static IList<Chirp> FindReplies(string username)
-		{
-			return (from c in Find() where c.Text.Contains(username) select c).ToList().Select((c) => new Chirp(c.Username, c.Text, c.Timestamp)).ToList();
-		}
+		//public static IList<Chirp> FindReplies(string username)
+		//{
+		//    return (from c in Find() where c.Text.Contains(username) select c).ToList().Select((c) => new Chirp(c.Username, c.Text, c.Timestamp)).ToList();
+		//}
 	}
 }
