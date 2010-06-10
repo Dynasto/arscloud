@@ -131,34 +131,65 @@ namespace ArsCloud.Azure
 
 		public static void Initialize()
 		{
-			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
-			CloudQueueClient cloudQueueClient = account.CreateCloudQueueClient();
-			CloudQueue queue = cloudQueueClient.GetQueueReference(QUEUE_NAME);
+			CloudQueue queue = GetQueue();
 			queue.CreateIfNotExist();
 		}
 
 		public static void AddResizeRequest(Uri imageToResize)
 		{
-			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
-			CloudQueueClient cloudQueueClient = account.CreateCloudQueueClient();
-			CloudQueue queue = cloudQueueClient.GetQueueReference(QUEUE_NAME);
+			CloudQueue queue = GetQueue();
 			CloudQueueMessage message = new CloudQueueMessage(imageToResize.ToString());
 			queue.AddMessage(message);
 		}
 
-		public static Uri GetResizeRequest()
+		public class MessageKey
 		{
-			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
-			CloudQueueClient cloudQueueClient = account.CreateCloudQueueClient();
-			CloudQueue queue = cloudQueueClient.GetQueueReference(QUEUE_NAME);
+			public MessageKey()
+			{
+			}
+
+			public MessageKey(string messageId, string popReceipt)
+			{
+				MessageId = messageId;
+				PopReceipt = popReceipt;
+			}
+
+			internal string MessageId { get; set; }
+			internal string PopReceipt { get; set; }
+		}
+
+		public static Uri GetResizeRequest(out MessageKey key)
+		{
+			CloudQueue queue = GetQueue();
 			if(queue.RetrieveApproximateMessageCount() == 0)
 			{
+				key = null;
 				return null;
 			}
 			CloudQueueMessage message = queue.GetMessage();
 			Uri result = new Uri(message.AsString);
-			queue.DeleteMessage(message);
+			key = new MessageKey(message.Id, message.PopReceipt);
 			return result;
+		}
+
+		public static void DeleteResizeRequest(MessageKey key)
+		{
+			CloudQueue queue = GetQueue();
+			queue.DeleteMessage(key.MessageId, key.PopReceipt);
+		}
+
+		private static CloudQueue GetQueue()
+		{
+			CloudQueueClient cloudQueueClient = GetClient();
+			CloudQueue queue = cloudQueueClient.GetQueueReference(QUEUE_NAME);
+			return queue;
+		}
+
+		private static CloudQueueClient GetClient()
+		{
+			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
+			CloudQueueClient cloudQueueClient = account.CreateCloudQueueClient();
+			return cloudQueueClient;
 		}
 	}
 
@@ -183,9 +214,7 @@ namespace ArsCloud.Azure
 
 		public static void Initialize()
 		{
-			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
-			CloudBlobClient cloudBlobClient = account.CreateCloudBlobClient();
-			CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(CONTAINER_NAME);
+			CloudBlobContainer cloudBlobContainer = GetContainer();
 			
 			if(cloudBlobContainer.CreateIfNotExist())
 			{
@@ -195,11 +224,16 @@ namespace ArsCloud.Azure
 			}
 		}
 
-		public static Uri Save(string username, Stream input)
+		private static CloudBlobClient GetClient()
 		{
 			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
 			CloudBlobClient cloudBlobClient = account.CreateCloudBlobClient();
-			CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(CONTAINER_NAME);
+			return cloudBlobClient;
+		}
+
+		public static Uri Save(string username, Stream input)
+		{
+			CloudBlobContainer cloudBlobContainer = GetContainer();
 			CloudBlob cloudBlob = cloudBlobContainer.GetBlobReference(GetBlobName(username));
 			using(BlobStream blobStream = cloudBlob.OpenWrite())
 			{
@@ -210,43 +244,77 @@ namespace ArsCloud.Azure
 
 		public static Uri GetUri(string username)
 		{
-			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
-			CloudBlobClient cloudBlobClient = account.CreateCloudBlobClient();
+			CloudBlobClient cloudBlobClient = GetClient();
 			CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(CONTAINER_NAME);
 			return cloudBlobContainer.GetBlobReference(GetBlobName(username)).Uri;
 		}
 
 		public static Uri GetUri(string username, int size)
 		{
-			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
-			CloudBlobClient cloudBlobClient = account.CreateCloudBlobClient();
-			CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(CONTAINER_NAME);
+			CloudBlobContainer cloudBlobContainer = GetContainer();
 			return cloudBlobContainer.GetBlobReference(GetBlobName(username) + "/" + size.ToString()).Uri;
+		}
+
+		public static bool HasUri(string username)
+		{
+			CloudBlobContainer cloudBlobContainer = GetContainer();
+			CloudBlob blob = cloudBlobContainer.GetBlobReference(GetBlobName(username));
+			return CheckExists(blob);
+		}
+
+		private static bool CheckExists(CloudBlob blob)
+		{
+			try
+			{
+				blob.FetchAttributes();
+				return true;
+			}
+			catch(StorageClientException e)
+			{
+				if(e.ErrorCode == StorageErrorCode.ResourceNotFound)
+				{
+					return false;
+				}
+				else
+				{
+					throw;
+				}
+			}
+		}
+
+		public static bool HasUri(string username, int size)
+		{
+			CloudBlobContainer cloudBlobContainer = GetContainer();
+			CloudBlob blob = cloudBlobContainer.GetBlobReference(GetBlobName(username) + "/" + size.ToString());
+			return CheckExists(blob);
+		}
+
+		private static CloudBlobContainer GetContainer()
+		{
+			CloudBlobClient cloudBlobClient = GetClient();
+			CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(CONTAINER_NAME);
+			return cloudBlobContainer;
 		}
 
 		public static Stream GetReadStream(Uri geller)
 		{
-			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
-			CloudBlobClient cloudBlobClient = account.CreateCloudBlobClient();
+			CloudBlobClient cloudBlobClient = GetClient();
 			CloudBlob cb = new CloudBlob(geller.ToString(), cloudBlobClient);
 			return cb.OpenRead();
 		}
 
 		public static Stream GetWriteStream(Uri geller)
 		{
-			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
-			CloudBlobClient cloudBlobClient = account.CreateCloudBlobClient();
+			CloudBlobClient cloudBlobClient = GetClient();
 			CloudBlob cb = new CloudBlob(geller.ToString(), cloudBlobClient);
 			return cb.OpenWrite();
 		}
 
 		public static Stream GetWriteStream(Uri geller, int size)
 		{
-			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
-			CloudBlobClient cloudBlobClient = account.CreateCloudBlobClient();
+			CloudBlobClient cloudBlobClient = GetClient();
 			CloudBlob cb = new CloudBlob(geller.ToString() + "/" + size.ToString(), cloudBlobClient);
 			return cb.OpenWrite();
 		}
-
 	}
 }

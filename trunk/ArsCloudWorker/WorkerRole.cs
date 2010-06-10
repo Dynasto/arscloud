@@ -21,7 +21,8 @@ namespace ArsCloud.Worker
 		{
 			while(true)
 			{
-				Uri toResize = ResizeRequestManager.GetResizeRequest();
+				ResizeRequestManager.MessageKey key;
+				Uri toResize = ResizeRequestManager.GetResizeRequest(out key);
 				if(toResize == null)
 				{
 					Thread.Sleep(60000);
@@ -47,6 +48,7 @@ namespace ArsCloud.Worker
 						thumbnail.Save(dst, original.RawFormat);
 					}
 				}
+				ResizeRequestManager.DeleteResizeRequest(key);
 			}
 		}
 
