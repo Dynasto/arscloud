@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<ArsCloudWeb.Models.ChirpModel>" %>
+﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<ArsCloud.Web.Models.ChirpModel>" %>
 <%
 	if(Request.IsAuthenticated)
 	{

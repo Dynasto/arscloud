@@ -5,7 +5,7 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 
-namespace ArsCloudWeb.Models
+namespace ArsCloud.Web.Models
 {
 	public class ChirpModel
 	{
