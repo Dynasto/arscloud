@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage" %>
 <%@ Import Namespace="ArsCloudWeb.Data" %>
+<%@ Import Namespace="ArsCloudWeb.Utility" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
     Home Page
@@ -7,18 +8,12 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 	<h2>Chirp</h2>
-	<% Html.RenderPartial("ChirpCreate"); %>
-	<ul>
-	<%
-		foreach(Chirp c in (ViewData["AllChirps"] as IList<Chirp>))
-		{
-		%>
-		<li>
-			<div class="chirp-username"><%= Html.Encode(c.Username) %></div>
-			<div class="chirp-text"><%= Html.Encode(c.Text) %></div>
-			<div class="chirp-timestamp"><%= Html.Encode(c.Timestamp) %></div>
-		</li>
-		<%
-		}
-	%></ul>
+	<% Html.RenderAction("Create", "Chirp"); %>
+	<% Html.RenderAction("List", "Chirp"); %>
+	<div class="chirp-menu">
+	<% if(Request.IsAuthenticated) { %>
+		<%: Html.ActionLink("All Chirps", "ListAll", "Chirp")   %><br />
+		<%: Html.ActionLink("My Chirps", "ListMine", "Chirp")%><br />
+	<% } %>
+	</div>
 </asp:Content>
