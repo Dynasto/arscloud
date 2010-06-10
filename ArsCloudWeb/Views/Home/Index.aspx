@@ -8,14 +8,17 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 	<h2>Chirp</h2>
 	<% Html.RenderPartial("ChirpCreate"); %>
-	<dl>
+	<ul>
 	<%
 		foreach(Chirp c in (ViewData["AllChirps"] as IList<Chirp>))
 		{
 		%>
-		<dt><%= c.Username %></dt>
-		<dd><%= c.Text %></dd>
+		<li>
+		<div class="chirp-username"><%= c.Username %></div>
+		<div class="chirp-text"><%= c.Text %></div>
+		<div class="chirp-timestamp"><%= c.Timestamp %></div>
+		</li>
 		<%
 		}
-	%></dl>
+	%></ul>
 </asp:Content>

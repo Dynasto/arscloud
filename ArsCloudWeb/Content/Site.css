@@ -1,11 +1,6 @@
-﻿/*----------------------------------------------------------
-The base color for this template is #5c87b2. If you'd like
-to use a different color start by replacing all instances of
-#5c87b2 with your new color.
-----------------------------------------------------------*/
-body
+﻿body
 {
-    background-color: #5c87b2;
+    background-color: #F14D07;
     font-size: .75em;
     font-family: Verdana, Helvetica, Sans-Serif;
     margin: 0;
@@ -36,6 +31,28 @@ p, ul
 {
     margin-bottom: 20px;
     line-height: 1.6em;
+}
+
+.chirp-form 
+{
+	display: table;
+}
+
+.chirp-fields
+{
+	display: table-row;
+}
+
+.chirp-fields > div
+{
+	display: table-cell;
+}
+
+.chirp-textbox-label 
+{
+	font-size: 120%;
+	vertical-align: top;
+	font-style: italic;
 }
 
 /* HEADINGS   
@@ -84,7 +101,7 @@ first child of the left and right table columns */
 page width. Or, you can specify an exact pixel width. */
 .page
 {
-    width: 90%;
+    width: 800px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -114,7 +131,6 @@ page width. Or, you can specify an exact pixel width. */
     padding: 30px 30px 15px 30px;
     background-color: #fff;
     margin-bottom: 30px;
-    _height: 1px; /* only IE6 applies CSS properties starting with an underscore */
 }
 
 #footer
@@ -131,7 +147,7 @@ page width. Or, you can specify an exact pixel width. */
 ----------------------------------------------------------*/
 ul#menu
 {
-    border-bottom: 1px #5C87B2 solid;
+    border-bottom: 1px #F14D07 solid;
     padding: 0 0 2px;
     position: relative;
     margin: 0;

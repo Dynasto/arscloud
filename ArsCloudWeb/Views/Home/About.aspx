@@ -6,7 +6,5 @@
 
 <asp:Content ID="aboutContent" ContentPlaceHolderID="MainContent" runat="server">
     <h2>About</h2>
-    <p>
-        Put content here.
-    </p>
+    <p>This is a silly little application to show off some Azure features.</p>
 </asp:Content>
