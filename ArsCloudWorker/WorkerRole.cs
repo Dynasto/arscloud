@@ -8,6 +8,10 @@ using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.Diagnostics;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.StorageClient;
+using ArsCloud.Azure;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.IO;
 
 namespace ArsCloud.Worker
 {
@@ -15,13 +19,34 @@ namespace ArsCloud.Worker
 	{
 		public override void Run()
 		{
-			// This is a sample worker implementation. Replace with your logic.
-			Trace.WriteLine("ArsCloud.Worker entry point called", "Information");
-
 			while(true)
 			{
-				Thread.Sleep(60000);
-				Trace.WriteLine("Working", "Information");
+				Uri toResize = ResizeRequestManager.GetResizeRequest();
+				if(toResize == null)
+				{
+					Thread.Sleep(60000);
+					continue;
+				}
+				Image original;
+				using(Stream src = AvatarManager.GetReadStream(toResize))
+				{
+					original = Image.FromStream(src);
+				}
+				int[] sizes = { 16, 32, 64 };
+				foreach(int size in sizes)
+				{
+					Image thumbnail = new Bitmap(size, size);
+					Graphics g = Graphics.FromImage(thumbnail);
+					g.CompositingQuality = CompositingQuality.GammaCorrected | CompositingQuality.HighQuality;
+					g.SmoothingMode = SmoothingMode.HighQuality;
+					g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+					Rectangle r = new Rectangle(0, 0, size, size);
+					g.DrawImage(original, r);
+					using(Stream dst = AvatarManager.GetWriteStream(new Uri(toResize.ToString() + "/" + size.ToString())))
+					{
+						thumbnail.Save(dst, original.RawFormat);
+					}
+				}
 			}
 		}
 
@@ -36,10 +61,7 @@ namespace ArsCloud.Worker
 			config.DiagnosticInfrastructureLogs.ScheduledTransferLogLevelFilter = LogLevel.Error;
 			DiagnosticMonitor.Start("DiagnosticsConnectionString", config);
 
-			// For information on handling configuration changes
-			// see the MSDN topic at http://go.microsoft.com/fwlink/?LinkId=166357.
-			//RoleEnvironment.Changing += RoleEnvironmentChanging;
-
+			RoleEnvironment.Changing += RoleEnvironmentChanging;
 			CloudStorageAccount.SetConfigurationSettingPublisher((configName, configSetter) =>
 			{
 				configSetter(RoleEnvironment.GetConfigurationSettingValue(configName));
@@ -55,6 +77,9 @@ namespace ArsCloud.Worker
 					}
 				};
 			});
+
+			AvatarManager.Initialize();
+			ResizeRequestManager.Initialize();
 
 			return base.OnStart();
 		}

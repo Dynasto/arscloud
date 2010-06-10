@@ -145,6 +145,21 @@ namespace ArsCloud.Azure
 			CloudQueueMessage message = new CloudQueueMessage(imageToResize.ToString());
 			queue.AddMessage(message);
 		}
+
+		public static Uri GetResizeRequest()
+		{
+			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
+			CloudQueueClient cloudQueueClient = account.CreateCloudQueueClient();
+			CloudQueue queue = cloudQueueClient.GetQueueReference(QUEUE_NAME);
+			if(queue.RetrieveApproximateMessageCount() == 0)
+			{
+				return null;
+			}
+			CloudQueueMessage message = queue.GetMessage();
+			Uri result = new Uri(message.AsString);
+			queue.DeleteMessage(message);
+			return result;
+		}
 	}
 
 	public class AvatarManager
@@ -199,6 +214,22 @@ namespace ArsCloud.Azure
 			CloudBlobClient cloudBlobClient = account.CreateCloudBlobClient();
 			CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(CONTAINER_NAME);
 			return cloudBlobContainer.GetBlobReference(GetBlobName(username)).Uri;
+		}
+
+		public static Stream GetReadStream(Uri geller)
+		{
+			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
+			CloudBlobClient cloudBlobClient = account.CreateCloudBlobClient();
+			CloudBlob cb = new CloudBlob(geller.ToString(), cloudBlobClient);
+			return cb.OpenRead();
+		}
+
+		public static Stream GetWriteStream(Uri geller)
+		{
+			CloudStorageAccount account = CloudStorageAccount.FromConfigurationSetting("DataConnectionString");
+			CloudBlobClient cloudBlobClient = account.CreateCloudBlobClient();
+			CloudBlob cb = new CloudBlob(geller.ToString(), cloudBlobClient);
+			return cb.OpenWrite();
 		}
 	}
 }
