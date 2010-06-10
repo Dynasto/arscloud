@@ -14,9 +14,9 @@
 		{
 		%>
 		<li>
-		<div class="chirp-username"><%= c.Username %></div>
-		<div class="chirp-text"><%= c.Text %></div>
-		<div class="chirp-timestamp"><%= c.Timestamp %></div>
+			<div class="chirp-username"><%= Html.Encode(c.Username) %></div>
+			<div class="chirp-text"><%= Html.Encode(c.Text) %></div>
+			<div class="chirp-timestamp"><%= Html.Encode(c.Timestamp) %></div>
 		</li>
 		<%
 		}

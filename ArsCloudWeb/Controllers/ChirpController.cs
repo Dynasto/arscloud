@@ -12,6 +12,7 @@ namespace ArsCloudWeb.Controllers
 	{
 		// POST: /Chirp/Create
 		[HttpPost]
+		[Authorize]
 		public ActionResult Create(ChirpModel cm)
 		{
 			try
