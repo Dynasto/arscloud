@@ -42,7 +42,7 @@ namespace ArsCloud.Worker
 					g.InterpolationMode = InterpolationMode.HighQualityBicubic;
 					Rectangle r = new Rectangle(0, 0, size, size);
 					g.DrawImage(original, r);
-					using(Stream dst = AvatarManager.GetWriteStream(new Uri(toResize.ToString() + "/" + size.ToString())))
+					using(Stream dst = AvatarManager.GetWriteStream(toResize, size))
 					{
 						thumbnail.Save(dst, original.RawFormat);
 					}
