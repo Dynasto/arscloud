@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<ServiceConfiguration serviceName="ArsCloud" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration">
+  <Role name="ArsCloudWeb">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="DiagnosticsConnectionString" value="DefaultEndpointsProtocol=https;AccountName=arscloudstorage;AccountKey=lP3j4qtVq5VT9RP1KEJqYdUVnnxY3TjJAE5dzf+vNZyBLAK7gkNZLHbcT0sSG/sG0Ts45XtbwVOr4zl3QSAL1w==" />
+      <Setting name="DataConnectionString" value="DefaultEndpointsProtocol=https;AccountName=arscloudstorage;AccountKey=lP3j4qtVq5VT9RP1KEJqYdUVnnxY3TjJAE5dzf+vNZyBLAK7gkNZLHbcT0sSG/sG0Ts45XtbwVOr4zl3QSAL1w==" />
+    </ConfigurationSettings>
+  </Role>
+  <Role name="ArsCloudWorker">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="DiagnosticsConnectionString" value="DefaultEndpointsProtocol=https;AccountName=arscloudstorage;AccountKey=lP3j4qtVq5VT9RP1KEJqYdUVnnxY3TjJAE5dzf+vNZyBLAK7gkNZLHbcT0sSG/sG0Ts45XtbwVOr4zl3QSAL1w==" />
+      <Setting name="DataConnectionString" value="DefaultEndpointsProtocol=https;AccountName=arscloudstorage;AccountKey=lP3j4qtVq5VT9RP1KEJqYdUVnnxY3TjJAE5dzf+vNZyBLAK7gkNZLHbcT0sSG/sG0Ts45XtbwVOr4zl3QSAL1w==" />
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>

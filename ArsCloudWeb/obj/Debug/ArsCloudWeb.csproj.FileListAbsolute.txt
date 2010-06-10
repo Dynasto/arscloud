@@ -1,0 +1,11 @@
+c:\users\drpizza\documents\visual studio 2010\Projects\ArsCloud\ArsCloudWeb\bin\ArsCloudWeb.dll
+c:\users\drpizza\documents\visual studio 2010\Projects\ArsCloud\ArsCloudWeb\bin\ArsCloudWeb.pdb
+c:\users\drpizza\documents\visual studio 2010\Projects\ArsCloud\ArsCloudWeb\bin\Microsoft.WindowsAzure.Diagnostics.dll
+c:\users\drpizza\documents\visual studio 2010\Projects\ArsCloud\ArsCloudWeb\bin\Microsoft.WindowsAzure.StorageClient.dll
+c:\users\drpizza\documents\visual studio 2010\Projects\ArsCloud\ArsCloudWeb\bin\System.Web.Mvc.dll
+c:\users\drpizza\documents\visual studio 2010\Projects\ArsCloud\ArsCloudWeb\bin\Microsoft.WindowsAzure.Diagnostics.xml
+c:\users\drpizza\documents\visual studio 2010\Projects\ArsCloud\ArsCloudWeb\bin\Microsoft.WindowsAzure.StorageClient.xml
+c:\users\drpizza\documents\visual studio 2010\Projects\ArsCloud\ArsCloudWeb\bin\System.Web.Mvc.xml
+c:\users\drpizza\documents\visual studio 2010\Projects\ArsCloud\ArsCloudWeb\obj\Debug\ResolveAssemblyReference.cache
+c:\users\drpizza\documents\visual studio 2010\Projects\ArsCloud\ArsCloudWeb\obj\Debug\ArsCloudWeb.dll
+c:\users\drpizza\documents\visual studio 2010\Projects\ArsCloud\ArsCloudWeb\obj\Debug\ArsCloudWeb.pdb
